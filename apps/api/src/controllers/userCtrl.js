@@ -64,7 +64,6 @@ export const login = async (req, res, next) => {
         // Vérifie si le password reçu correspond avec celui de la base de données
         const isPasswordGood = await verify(userFind.password, password);
         if (!isPasswordGood) throw new Api400Error("Mot de passe incorrect");
-
         res.status(200).json({
             userId: userFind._id,
             token: jwt.sign({ sub: userFind._id }, process.env.JWT_KEY, { expiresIn: "24h" }),

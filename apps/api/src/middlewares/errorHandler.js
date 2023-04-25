@@ -1,4 +1,5 @@
 import { isOperationalError } from "../helper/error/function.js"
+import { logger } from "../helper/winston.js";
 
 /**
  * Middleware Permettant la gestion des erreurs
@@ -14,5 +15,7 @@ export const errorHandler = (error, req, res, next) => {
     }
     res.statusMessage = error.message
     res.status(error.statusCode).json(error)
+    logger.info(error)
+    console.log('logger');
     //logger here
 }
