@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Joi from "joi"
+import { customJoi as Joi } from "../helper/CustomJoi.js"
 
 const sauceSchema = mongoose.Schema({
     userId: { type: String, required: true },
@@ -21,17 +21,17 @@ const sauceSchema = mongoose.Schema({
  */
 export const validate = (sauce) => {
     const schema = Joi.object({
-        userId: Joi.string().required(),
-        name: Joi.string().required(),
-        manufacturer: Joi.string().required(),
-        description: Joi.string().required(),
-        mainPepper: Joi.string().required(),
-        imageUrl: Joi.string().required(),
+        userId: Joi.string().required().escapeHTML(),
+        name: Joi.string().required().escapeHTML(),
+        manufacturer: Joi.string().required().escapeHTML(),
+        description: Joi.string().required().escapeHTML(),
+        mainPepper: Joi.string().required().escapeHTML(),
+        imageUrl: Joi.string().required().escapeHTML(),
         heat: Joi.number().min(1).max(10).required(),
         likes: Joi.number(),
         dislikes: Joi.number(),
-        usersLiked: Joi.array(),
-        usersDisliked: Joi.array(),
+        usersLiked: Joi.array().items(Joi.string().escapeHTML()),
+        usersDisliked: Joi.array().items(Joi.string().escapeHTML()),
     });
     return schema.validate(sauce);
 };
@@ -42,17 +42,17 @@ export const validate = (sauce) => {
  */
 export const validateForUpdate = (sauce) => {
     const schema = Joi.object({
-        userId: Joi.string(),
-        name: Joi.string(),
-        manufacturer: Joi.string(),
-        description: Joi.string(),
-        mainPepper: Joi.string(),
-        imageUrl: Joi.string(),
+        userId: Joi.string().escapeHTML(),
+        name: Joi.string().escapeHTML(),
+        manufacturer: Joi.string().escapeHTML(),
+        description: Joi.string().escapeHTML(),
+        mainPepper: Joi.string().escapeHTML(),
+        imageUrl: Joi.string().escapeHTML(),
         heat: Joi.number().min(1).max(10),
         likes: Joi.number(),
         dislikes: Joi.number(),
-        usersLiked: Joi.array(),
-        usersDisliked: Joi.array(),
+        usersLiked: Joi.array().items(Joi.string().escapeHTML()),
+        usersDisliked: Joi.array().items(Joi.string().escapeHTML()),
     });
     return schema.validate(sauce);
 }

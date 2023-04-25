@@ -9,9 +9,10 @@ import { isOperationalError } from "../helper/error/function.js"
  */
 export const errorHandler = (error, req, res, next) => {
     if(!isOperationalError(error)) {
-        // next(error)
+        next(error)
         return;
     }
+    res.statusMessage = error.message
     res.status(error.statusCode).json(error)
     //logger here
 }

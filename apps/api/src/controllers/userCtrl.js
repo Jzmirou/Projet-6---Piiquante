@@ -25,14 +25,14 @@ export const signUp = async (req, res, next) => {
         // Vérifie si l'email est déjà enregistré dans la base de données
         const userFind = await findUserByEmail(email);
         if (userFind) throw new Api400Error("Cette adresse email est déjà utilisé");
-        
+        const userObject = {email: email, password: password}
         // Vérifie la validité des données enregistré
-        const userObject = { email: emailSecure, password: passwordSecure };
         const { error } = validate(userObject);
         if (error) throw new Api400Error(error.message);
-
+        
         // Enregistrement d'un nouvel utilisateur dans la base de données
-        const user = await createUser(userObject);
+        const userObjectSecure = { email: emailSecure, password: passwordSecure };
+        const user = await createUser(userObjectSecure);
 
         res.status(201).json(user);
     } catch (error) {
