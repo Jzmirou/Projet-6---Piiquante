@@ -7,7 +7,7 @@ import mongoSanitize from "express-mongo-sanitize"
 import rateLimit from "express-rate-limit"
 import { router as routerUser } from "./src/routes/usersRoute.js";
 import { router as routerSauce } from "./src/routes/saucesRoute.js";
-
+import { errorHandler } from "./src/middlewares/errorHandler.js";
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename);
 
@@ -41,3 +41,15 @@ app.use("/api/auth", routerUser);
 app.use("/api/sauces", routerSauce);
 app.use("/images", express.static(join(__dirname, "images")))
 
+app.use(errorHandler);
+
+// // Attrapez toutes les erreurs non interceptées
+// process.on("uncaughtException", async (error) => {  
+//     if (!isOperationalError(error)) {
+//         process.exit(1);
+//     }
+// });
+// // Attrapez tous les refus de promesse non gérés
+// process.on('unhandledRejection', error => {
+//     throw error
+//    })
