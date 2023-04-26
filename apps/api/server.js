@@ -1,11 +1,11 @@
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import { app } from "./app.js";
-
 dotenv.config();
 
 const url = process.env.DATABASE_URL;
 
+// Connexion à la base de donnée
 mongoose.connect(url)
     .then(() => console.log("DB connection successful"))
     .catch((error) => console.log(error));

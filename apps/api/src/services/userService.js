@@ -1,5 +1,4 @@
 import { User } from "../models/User.js";
-import { Api400Error, Api500Error } from '../helper/error/errorCustom.js';
 
 /**
  * Modèle représentant les données d'un utilisateur dans la base de donnée
@@ -16,10 +15,9 @@ import { Api400Error, Api500Error } from '../helper/error/errorCustom.js';
 export const createUser = async (user) => {
     try {
         const dataToSave = await User.create(user)
-        if(!dataToSave) throw new Api500Error("l'enregistrement de l'utilisateur c'est mal passé")
-        return dataToSave
+        return [null ,dataToSave]
     } catch (error) {
-        throw error
+        return [error, null]
     }
 }
 /**
@@ -28,9 +26,12 @@ export const createUser = async (user) => {
  * @returns {Promise<UserData> | undefined}
  */
 export const findUserByEmail = async (email) => {
-        let user = await User.findOne({email: email})
-        if (!user) return undefined
-        return user
+    try {
+        const user = await User.findOne({email: email})
+        return [null, user]
+    } catch (error) {
+        return [error, null]
+    }
 }
 /**
  * Récupère un utilisateur dans la base de donnés a partir de son ID
@@ -38,7 +39,10 @@ export const findUserByEmail = async (email) => {
  * @returns {Promise<UserData> | undefined} 
  */
 export const findUserById = async (id) => {
-        let user = await User.findById(id)
-        if (!user) return undefined
-        return user
+    try {
+        const user = await User.findById(id)
+        return [null, user]
+    } catch (error) {
+        return [error, null]
+    }
 }

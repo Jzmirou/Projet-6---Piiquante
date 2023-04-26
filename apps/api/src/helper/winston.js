@@ -5,7 +5,7 @@ dotenv.config();
 
 export const logger = createLogger({
     level: 'debug',
-    format : format.json(),
+    format : format.combine(format.errors({ stack: true }), format.timestamp(), format.json()),
     transports: [
         new transports.File({
             filename: `${appRoot.path}/logs/server/error.log`, level: 'error',

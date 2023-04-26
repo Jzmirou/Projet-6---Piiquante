@@ -26,32 +26,7 @@ export class BaseError extends Error {
     }
 }
 
-export class Api404Error extends BaseError {
-    /**
-     * @type {Number}
-     */
-    statusCode;
 
-    /**
-     * @type {Boolean}
-     */
-    isOperational;
-
-    /**
-     * @type {String}
-     */
-    message;
-    
-    /**
-     * @param {String} message 
-     */
-    constructor(message) {
-        super(message);
-        this.message = message
-        this.statusCode = httpStatusCodes.NOT_FOUND;
-        this.isOperational = true;
-    }
-}
 export class Api400Error extends BaseError {
     /**
      * @type {Number}
@@ -75,6 +50,84 @@ export class Api400Error extends BaseError {
         super(message);
         this.message = message
         this.statusCode = httpStatusCodes.BAD_REQUEST;
+        this.isOperational = true;
+    }
+}
+export class Api401Error extends BaseError {
+    /**
+     * @type {Number}
+     */
+    statusCode;
+
+    /**
+     * @type {Boolean}
+     */
+    isOperational;
+
+    /**
+     * @type {String}
+     */
+    message;
+    
+    /**
+     * @param {String} message 
+     */
+    constructor(message) {
+        super(message);
+        this.message = message
+        this.statusCode = httpStatusCodes.UNAUTHORIZED;
+        this.isOperational = true;
+    }
+}
+export class Api403Error extends BaseError {
+    /**
+     * @type {Number}
+     */
+    statusCode;
+
+    /**
+     * @type {Boolean}
+     */
+    isOperational;
+
+    /**
+     * @type {String}
+     */
+    message;
+    
+    /**
+     * @param {String} message 
+     */
+    constructor(message) {
+        super(message);
+        this.message = message
+        this.statusCode = httpStatusCodes.FORBIDDEN;
+        this.isOperational = true;
+    }
+}
+export class Api404Error extends BaseError {
+    /**
+     * @type {Number}
+     */
+    statusCode;
+
+    /**
+     * @type {Boolean}
+     */
+    isOperational;
+
+    /**
+     * @type {String}
+     */
+    message;
+    
+    /**
+     * @param {String} message 
+     */
+    constructor(message) {
+        super(message);
+        this.message = message
+        this.statusCode = httpStatusCodes.NOT_FOUND;
         this.isOperational = true;
     }
 }

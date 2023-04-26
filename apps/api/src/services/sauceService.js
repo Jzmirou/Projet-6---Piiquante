@@ -1,5 +1,4 @@
-
-import { Api400Error, Api404Error, Api500Error } from "../helper/error/errorCustom.js";
+import { Api400Error} from "../helper/error/errorCustom.js";
 import { Sauce } from "../models/Sauce.js";
 
 /**
@@ -25,10 +24,10 @@ import { Sauce } from "../models/Sauce.js";
 export const findAllSauces = async () => {
     try {
         const findSauces = await Sauce.find()
-        if( !findSauces) throw new Api500Error('Problème serveur')
-        return findSauces
+        if(!findSauces) throw new Api400Error('Aucune sauce trouvé')
+        return [null, findSauces]
     } catch (error) {
-        throw error
+        return [error, null]
     }
 };
 
@@ -39,10 +38,11 @@ export const findAllSauces = async () => {
  */
 export const findOneSauceById = async (id) => {
     try {
-        const findSauce = await Sauce.findById(id)
-        return findSauce
+        const findSauce = await Sauce.findOne({_id: id})
+        if(!findSauce) throw new Api400Error('Aucune sauce trouvé')
+        return [null, findSauce]
     } catch (error) {
-        throw new Api404Error('Sauce non trouvé')
+        return [error, null]
     }
 };
 
@@ -61,9 +61,10 @@ export const createSauce = async (sauce) => {
             usersLiked: [],
             usersDisliked: []
         });
-        return sauceCreated
+        if(!sauceCreated) throw new Api400Error('Sauce non créer')
+        return [null, sauceCreated]
     } catch (error) {
-        throw new Api400Error("Sauce non créer")
+        return [error, null]
     }
 };
 /**
@@ -77,9 +78,10 @@ export const updateSauceById = async (id ,sauce) => {
         const newSauce = await Sauce.findOneAndUpdate({_id: id }, sauce, {
             returnOriginal: false
           });
-          return newSauce
+          if(!newSauce) throw new Api400Error('Sauce non mis à jour')
+        return [null, newSauce]
     } catch (error) {
-        throw new Api400Error('Sauce non update')
+        return [error, null]
     }
 }
 /**
@@ -90,9 +92,10 @@ export const updateSauceById = async (id ,sauce) => {
 export const deleteSauceById = async (id) => {
     try {
         const deletedSauce = await Sauce.deleteOne({_id: id})
-        return deletedSauce
+        if(!deletedSauce) throw new Api400Error('Sauce non supprimez')
+        return [null, deletedSauce]
     } catch (error) {
-        throw new Api400Error('Sauce non supprimé')
+        return [error, null]
     }
 }
 /**
@@ -106,9 +109,10 @@ export const addLikeSauceById = async (id, userId) => {
         const update = await Sauce.findOneAndUpdate({_id: id}, { $inc: { likes: 1 }, $push: { usersLiked: userId } }, {
             returnOriginal: false
           })
-        return update
+          if(!update) throw new Api400Error('Like non ajouté')
+        return [null, update]
     } catch (error) {
-        throw new Api400Error('Like non ajouté')
+        return [error, null]
     }
 }
 /**
@@ -120,9 +124,10 @@ export const addLikeSauceById = async (id, userId) => {
 export const addDislikeSauceById = async (id, userId) => {
     try {
         const update = await Sauce.findByIdAndUpdate(id, { $inc: { dislikes: 1 }, $push: { usersDisliked: userId } })
-        return update
+        if(!update) throw new Api400Error('Dislike non ajouté')
+        return [null, update]
     } catch (error) {
-        throw new Api400Error('Dislike non ajouté')
+       return [error, null]
     }
 }
 /**
@@ -134,9 +139,10 @@ export const addDislikeSauceById = async (id, userId) => {
 export const removeLikeSauceById = async (id, userId) => {
     try {
         const update = await Sauce.findByIdAndUpdate(id, { $inc: { likes: -1 }, $pull: { usersLiked: userId } })
-        return update
+        if(!update) throw new Api400Error('Like non supprimez')
+        return [null, update]
     } catch (error) {
-        throw new Api400Error('Like non supprimé')
+        return [error, null]
     }
 }
 /**
@@ -148,8 +154,9 @@ export const removeLikeSauceById = async (id, userId) => {
 export const removeDislikeSauceById = async (id, userId) => {
     try {
         const update = await Sauce.findByIdAndUpdate(id, { $inc: { dislikes: -1 }, $pull: { usersDisliked: userId } })
-        return update
+        if(!update) throw new Api400Error('Dislike non supprimez')
+        return [null, update]
     } catch (error) {
-        throw new Api400Error('Dislike non ajouté')
+        return [error, null]
     }
 }
