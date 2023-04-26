@@ -27,8 +27,10 @@ app.use(express.json());
 
 // Sécurise les données reçu afin d’empêché les attaques par injection mongoDB (NoSql Injection)
 app.use(mongoSanitize())
+
 // Ajoute les headers de sécurité
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }))
+
 // Limite le nombres d'appels au serveur faite par une même ip 
 const limiter = rateLimit(rateLimitConfig)
 app.use(limiter)
@@ -36,13 +38,14 @@ app.use(limiter)
 /************************
  ******** Routes ********
  ************************/
+
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec) )
 app.use("/api/auth", routerUser);
 app.use("/api/sauces", routerSauce);
 app.use("/images", express.static(join(__dirname, "images")))
 
 /************************
- **** Error Handling ****
+ **** Gestion erreurs ****
  ************************/
 
 app.use(errorHandler);
@@ -52,7 +55,7 @@ process.on('unhandledRejection', error => {
     throw error
    })
 // // Attrapez toutes les erreurs non interceptées
-process.on("uncaughtException", async (error) => {  
+process.on("uncaughtException", error => {  
     if (!isOperationalError(error)) {
 		logger.error(error)
         process.exit(1);
